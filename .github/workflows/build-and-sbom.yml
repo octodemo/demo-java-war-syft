@@ -1,0 +1,63 @@
+name: Build and SBOM Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write        # required for Dependency Graph Submission API
+  security-events: write # required for CodeQL / SARIF uploads
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build WAR with Maven
+        run: mvn --batch-mode package -DskipTests
+
+      - name: Upload WAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-java-war
+          path: webapp/target/demo-java-war.war
+
+      # ---------------------------------------------------------------
+      # Syft SBOM — CycloneDX JSON (downloadable artifact)
+      # ---------------------------------------------------------------
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: webapp/target/demo-java-war.war
+          format: cyclonedx-json
+          artifact-name: sbom.cdx.json
+          upload-artifact: true
+          dependency-snapshot: false
+
+      # ---------------------------------------------------------------
+      # Syft SBOM — SPDX JSON submitted to GitHub Dependency Graph API
+      # This is the primary source of dependency data for this repo.
+      # The root pom.xml is a bare aggregator with no <dependencies>,
+      # and webapp/pom.xml uses Maven property placeholders for versions
+      # so the native Dependency Graph scanner cannot resolve them.
+      # All vulnerability data comes exclusively from this Syft submission.
+      # ---------------------------------------------------------------
+      - name: Generate SPDX SBOM and submit to GitHub Dependency Graph
+        uses: anchore/sbom-action@v0
+        with:
+          path: webapp/target/demo-java-war.war
+          format: spdx-json
+          artifact-name: sbom.spdx.json
+          upload-artifact: true
+          dependency-snapshot: true

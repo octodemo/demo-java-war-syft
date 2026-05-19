@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # Maven scanning intentionally omitted.
+  # The root pom.xml is an aggregator with no <dependencies>; all vulnerable
+  # dependencies live in webapp/pom.xml using Maven property placeholders for
+  # versions (${log4j.version} etc.) which the native scanner cannot resolve.
+  # All dependency data flows exclusively from the Syft SBOM submission to the
+  # GitHub Dependency Graph API (see build-and-sbom.yml).
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
