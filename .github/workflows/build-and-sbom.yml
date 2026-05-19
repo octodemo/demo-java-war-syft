@@ -28,7 +28,7 @@ jobs:
         run: mvn --batch-mode package -DskipTests
 
       - name: Upload WAR artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: demo-java-war
           path: webapp/target/demo-java-war.war
@@ -52,13 +52,13 @@ jobs:
         run: syft scan webapp/target/demo-java-war.war -o spdx-json=sbom.spdx.json
 
       - name: Upload CycloneDX SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom-cyclonedx-json
           path: sbom.cdx.json
 
       - name: Upload SPDX SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom-spdx-json
           path: sbom.spdx.json
