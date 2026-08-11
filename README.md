@@ -22,7 +22,7 @@ The build workflow uses `anchore/sbom-action` (Syft) to scan the compiled `demo-
 
 ---
 
-## Vulnerable Dependencies Included
+## Demo Dependencies Included
 
 | Library | Version | CVE | Severity | Common Name |
 |---------|---------|-----|----------|-------------|
