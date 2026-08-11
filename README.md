@@ -29,7 +29,6 @@ The build workflow uses `anchore/sbom-action` (Syft) to scan the compiled `demo-
 | `log4j-core` | 2.14.1 | CVE-2021-44228 | Critical | Log4Shell |
 | `log4j-core` | 2.14.1 | CVE-2021-45046 | Critical | Log4Shell variant |
 | `spring-webmvc` | 5.3.17 | CVE-2022-22965 | Critical | Spring4Shell |
-| `commons-text` | 1.9 | CVE-2022-42889 | Critical | Text4Shell |
 | `jackson-databind` | 2.13.0 | CVE-2022-42003 | High | — |
 | `snakeyaml` | 1.29 | CVE-2022-25857 | High | — |
 
